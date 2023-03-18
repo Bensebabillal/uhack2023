@@ -1,0 +1,28 @@
+version: "3"
+services:
+  uhack:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./datasets:/home/jovyan/work/datasets
+      - ./src:/home/jovyan/work/notebooks
+    ports:
+      - 9000:8888
+    container_name: uhack
+    entrypoint: /usr/local/bin/start-notebook.sh --NotebookApp.token='' --NotebookApp.password='' --NotebookApp.disable_check_xsrf=True
+
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    volumes:
+      - postgres:/var/lib/postgresql/data
+
+volumes:
+  postgres:
